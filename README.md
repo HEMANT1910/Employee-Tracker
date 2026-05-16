@@ -118,17 +118,66 @@ VITE_API_URL=http://localhost:5000/api
 
 ## Deployment
 
+This project is deployed fully on Railway.
+
+### Deployment Architecture
+
+```txt
+GitHub Repository
+       │
+       ▼
+Railway Project
+       │
+ ┌──────────────┐
+ │ Frontend     │
+ │ Root: client │
+ └──────────────┘
+       │
+       ▼
+https://taskmanager-frontend.up.railway.app
+
+ ┌──────────────┐
+ │ Backend      │
+ │ Root: server │
+ └──────────────┘
+       │
+       ▼
+https://taskmanager-backend.up.railway.app
+       │
+       ▼
+MongoDB Atlas
+```
+
+### Backend Railway Configuration
+
+```txt
+Root Directory: server
+Start Command: npm start
+```
+
+### Frontend Railway Configuration
+
+```txt
+Root Directory: client
+Build Command: npm run build
+Start Command: npm run preview -- --host 0.0.0.0 --port $PORT
+```
+
+### Environment Variables
+
 Frontend:
 
-* Vercel
+```env
+VITE_API_URL=https://taskmanager-backend.up.railway.app/api
+```
 
 Backend:
 
-* Railway
-
-Database:
-
-* MongoDB Atlas
+```env
+MONGO_URI=your_mongodb_url
+JWT_SECRET=your_secret
+CLIENT_URL=https://taskmanager-frontend.up.railway.app
+```
 
 ## API Examples
 
@@ -165,6 +214,4 @@ DELETE /api/tasks/:id
 * Refresh tokens
 * Audit logs
 
-## Author
-Hemant Hazra
-@SS 2026
+
