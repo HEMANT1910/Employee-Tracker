@@ -19,9 +19,10 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://task-manager-sepia-sigma.vercel.app"
+      "https://task-manager-sepia-sigma.vercel.app",
+      "https://romantic-cat-production-5075.up.railway.app"
     ],
-    methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
   })
 );
