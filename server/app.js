@@ -20,25 +20,42 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://task-manager-sepia-sigma.vercel.app",
-  "https://romantic-cat-production-5075.up.railway.app"
+  "https://romantic-cat-production-5075.up.railway.app",
+  "https://employee-tracker-production-7736.up.railway.app"
 ];
 
-// CORS
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow Postman/server-to-server requests too
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+const corsOptions = {
+  origin: (origin, callback) => {
+    console.log("Request Origin:", origin);
 
-      return callback(new Error("CORS blocked"));
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
-  })
-);
+    // Allow requests without origin (Postman/server requests)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.log(`Blocked by CORS: ${origin}`);
+    return callback(new Error(`CORS blocked: ${origin}`));
+  },
+
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization"
+  ],
+
+  credentials: true
+};
+
+// CORS middleware
+app.use(cors(corsOptions));
+
+// Handle preflight OPTIONS requests
+app.options(/.*/, cors(corsOptions));
 
 // Body parser
 app.use(express.json());
@@ -55,7 +72,7 @@ app.use("/api", projectRoutes);
 app.use("/api", taskRoutes);
 app.use("/api", dashboardRoutes);
 
-// Error handler
+// Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
 
